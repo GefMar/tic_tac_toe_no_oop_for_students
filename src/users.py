@@ -3,16 +3,16 @@ import random
 from .constants import USER_TEMPLATE, COMP_NAMES, SYMBOLS
 
 
-def create_user(symbol) -> dict:
+def create_user(symbol, name) -> dict:
     user = {}
     for itm in USER_TEMPLATE:
-        user[itm[0]] = itm[1](symbol=symbol, user_type="USER")
+        user[itm[0]] = itm[1](symbol=symbol, user_type="USER", name=name)
     return user
 
 
-def create_comp(symbol) -> dict:
+def create_comp(symbol, name=None) -> dict:
     return {
-        "name": random.choice(COMP_NAMES),
+        "name": name or random.choice(COMP_NAMES),
         "symbol": symbol,
         "steps": [],
         "all_steps": set(),
@@ -47,9 +47,9 @@ def ask_mode() -> str:
         continue
 
 
-def create_users(mode) -> list[dict]:
+def create_users(mode, u1=None, u2=None) -> list[dict]:
     users = []
-    for symbol, mode in zip(SYMBOLS, ("USER", mode)):
-        user = MODES[mode]["creator"](symbol=symbol)
+    for symbol, mode, name in zip(SYMBOLS, ("USER", mode), (u1, u2)):
+        user = MODES[mode]["creator"](symbol=symbol, name=name)
         users.append(user)
     return users

@@ -7,20 +7,14 @@ from .steps import user_step
 from .users import ask_mode, create_users, MODES
 
 
-def game_init() -> dict:
+def game_init(commands=None) -> dict:
+    if not commands:
+        commands = {}
     print("Добро пожаловать в Игру Крестики Нолики")
-    mode = None
-    try:
-        argv_mode = sys.argv[1]
-        if argv_mode.upper() in MODES:
-            mode = argv_mode
-    except IndexError:
-        pass
-    if not mode:
-        mode = ask_mode()
+    mode = commands.get("-mode") or ask_mode()
     game_num = get_game_num()
     init_data = {
-        "users": create_users(mode),
+        "users": create_users(mode, commands.get('-u1'), commands.get("-u2")),
         "board": get_board(3),
         "mode": mode,
         "game_num": game_num,
